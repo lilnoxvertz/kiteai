@@ -2,38 +2,6 @@ const { Worker } = require("worker_threads")
 const path = require("path")
 
 class Workers {
-    static async authWorker(wallet, proxy) {
-        return new Promise((resolve, reject) => {
-            const worker = new Worker(path.resolve(__dirname, "../worker/auth.worker.js"), {
-                workerData: {
-                    wallet: wallet,
-                    proxy: proxy
-                }
-            })
-
-            worker.on("message", (message) => {
-                if (message.type === "success") {
-                    resolve()
-                }
-
-                if (message.type === "failed") {
-                    console.log(message.data)
-                    resolve()
-                }
-
-                if (message.type === "error") {
-                    reject(new Error(message.data))
-                }
-            })
-
-            worker.on("error", reject)
-            worker.on("exit", (code) => {
-                if (code !== 0) {
-                    reject(new Error("WORKER STOPPED"))
-                }
-            })
-        })
-    }
     static async agentWorker(walletAddress, proxy) {
         try {
             return new Promise((resolve, reject) => {

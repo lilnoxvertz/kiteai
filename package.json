@@ -10,7 +10,6 @@
     "interact": "node src/main/agent.interact.js",
     "register": "node src/main/register.wallet.js",
     "generate": "node src/main/generate.wallet.js",
-    "xp": "node src/main/get.xp.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
