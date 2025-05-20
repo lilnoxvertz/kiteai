@@ -3,8 +3,8 @@
 - multi wallet
 - register account
 - generate wallet
-- parallel task
-
+- interacting with agent
+  
 ## Setup
 
 1. Install Dependencies
