@@ -1,0 +1,23 @@
+{
+  "name": "kiteai",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "x",
+  "type": "commonjs",
+  "main": "main.js",
+  "scripts": {
+    "interact": "node src/main/agent.interact.js",
+    "register": "node src/main/register.wallet.js",
+    "generate": "node src/main/generate.wallet.js",
+    "xp": "node src/main/get.xp.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "dotenv": "^16.5.0",
+    "ethers": "^6.13.5",
+    "groq-sdk": "^0.20.1",
+    "https-proxy-agent": "^7.0.6",
+    "punycode": "^2.3.1"
+  }
+}
