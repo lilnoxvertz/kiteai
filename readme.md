@@ -13,10 +13,10 @@
     npm install
 ```
 
-2. Set private key on or Generate Private Key if u want to register your account (so it looks legit)
+2. Set private key on private_key.txt or Generate Private Key if u want to register your account (so it looks legit)
 3. Set address on address.txt if u only want to run the interaction bot
 4. Set proxy on proxy.txt (format: ip:port:username:password or ip:port)
-5. Set Groq Token on .env
+5. Set Groq Token on .env if u have one
 
 ## Generating Wallet
 
