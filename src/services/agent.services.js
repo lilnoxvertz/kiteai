@@ -45,7 +45,7 @@ class Agent {
         })
 
         let cycle = 0
-        let maxCycle = 3
+        let maxCycle = 20
 
         const groq_api_key = process.env.groq_api_key
 
