@@ -3,7 +3,8 @@ require("dotenv").config()
 
 class Groq {
     static async getQuestion(data) {
-        const client = new groq({
+        try {
+            const client = new groq({
             apiKey: process.env.groq_api_key
         })
 
@@ -22,6 +23,9 @@ class Groq {
 
         const question = await response.choices[0].message.content
         return question
+        } catch (error) {
+            console.error(error)
+        }
     }
 }
 
