@@ -1,5 +1,7 @@
 const { HttpsProxyAgent } = require("https-proxy-agent")
 const { header } = require("../config/config")
+const chalk = require("chalk")
+const { timestamp } = require("../utils/timestamp")
 
 class KiteAi {
     static async getAuthTicket(proxy) {
@@ -115,8 +117,8 @@ class KiteAi {
             const parsedResult = await JSON.parse(result)
             const userXp = await parsedResult?.payload?.userXp
 
-            console.log(`[${address}]`)
-            console.log(`🪙 XP: ${userXp}\n`)
+            console.log(`${timestamp()} [${address}]`)
+            console.log(chalk.yellowBright(`XP: ${userXp}\n`))
         } catch (error) {
             console.error(error)
         }

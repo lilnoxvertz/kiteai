@@ -1,5 +1,7 @@
 const { Worker } = require("worker_threads")
 const path = require("path")
+const { timestamp } = require("./timestamp")
+const chalk = require("chalk")
 
 class Workers {
     static async agentWorker(walletAddress, proxy) {
@@ -14,12 +16,12 @@ class Workers {
 
                 worker.on("message", (message) => {
                     if (message.type === "done") {
-                        console.log(`☑️ ${message.data.address} SUCCESSFULLY INTERACTING WITH AI`)
+                        console.log(`${timestamp()} ${chalk.yellowBright(`${message.data.address} SUCCESSFULLY INTERACTING WITH AI`)}`)
                         resolve()
                     }
 
                     if (message.type === "failed") {
-                        console.log(message.data)
+                        console.log(`${timestamp()} ${message.data}`)
                         resolve()
                     }
 
@@ -56,7 +58,7 @@ class Workers {
 
                 worker.on("message", (message) => {
                     if (message.type === "done") {
-                        console.log(`☑️ SUCCESSUFULLY RECORDED USAGE FOR ${walletAddress}`)
+                        console.log(`${timestamp()} ${chalk.greenBright(`SUCCESSUFULLY RECORDED USAGE FOR ${walletAddress}`)}`)
                         resolve({
                             success: true,
                             walletAddress: walletAddress
@@ -64,12 +66,11 @@ class Workers {
                     }
 
                     if (message.type === "failed") {
-                        console.log(message.data)
+                        console.log(`${timestamp} ${message.data}`)
                         resolve()
                     }
 
                     if (message.type === "error") {
-                        console.error("worker error:", message.data)
                         reject(new Error(message.data))
                     }
                 })

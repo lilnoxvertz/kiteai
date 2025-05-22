@@ -3,6 +3,8 @@ const Groq = require("./groq.services")
 const { parentPort, workerData } = require("worker_threads")
 const { URL } = require("url");
 const { HttpsProxyAgent } = require("https-proxy-agent");
+const chalk = require("chalk");
+const { timestamp } = require("../utils/timestamp");
 require("dotenv").config()
 
 global.URL = URL;
@@ -45,7 +47,7 @@ class Agent {
         })
 
         let cycle = 0
-        let maxCycle = 3
+        let maxCycle = 20
 
         const groq_api_key = process.env.groq_api_key
 
@@ -53,7 +55,7 @@ class Agent {
             try {
                 const randomIndex = Math.floor(Math.random() * prompt.length)
                 const question = groq_api_key ? await Groq.getQuestion(chatHistory) : prompt[randomIndex]
-                console.log(`💬 ${walletAddress} TRYING TO SEND QUESTION`)
+                console.log(`${timestamp()} ${chalk.yellowBright(`${walletAddress} TRYING TO SEND QUESTION`)}`)
 
                 const startTime = Date.now()
                 let firstTokenTime = null
@@ -71,7 +73,7 @@ class Agent {
                 if (!response.ok || !response.body) {
                     parentPort.postMessage({
                         type: "failed",
-                        data: `❗ ${walletAddress} FAILED INTERACTING WITH AGENT`
+                        data: chalk.redBright(`❗ ${walletAddress} FAILED INTERACTING WITH AGENT`)
                     })
                 }
 
@@ -116,7 +118,7 @@ class Agent {
                         } catch (error) {
                             parentPort.postMessage({
                                 type: "error",
-                                data: `❗ ${walletAddress} FAILED PARSING AGENT RESPONSE`
+                                data: chalk.redBright(`❗ ${walletAddress} FAILED PARSING AGENT RESPONSE`)
                             })
                             return
                         }
@@ -142,18 +144,18 @@ class Agent {
             }
 
             cycle++
-            console.log(`🟢 ${walletAddress} PASSED ${cycle} CYCLE`)
+            console.log(`${timestamp()} ${chalk.cyanBright(`${walletAddress} PASSED ${cycle} CYCLE`)}`)
             await new Promise(resolve => setTimeout(resolve, 20000))
         }
 
-        console.log(`✅ ${walletAddress} SUCCESSFULLY FINISHED ${cycle} CYCLE`)
+        console.log(`${timestamp()} ${chalk.cyanBright(`${walletAddress} SUCCESSFULLY FINISHED ${cycle} CYCLE`)}`)
     }
 
     static async reportUsage(address, question, response, total_time, ttft, proxy) {
         const url = new URL("https://quests-usage-dev.prod.zettablock.com/api/report_usage")
         const agent = proxy ? new HttpsProxyAgent(proxy) : undefined
 
-        console.log(`🟡 ${address} REPORTING USAGE`)
+        console.log(`${timestamp()} ${chalk.yellowBright(`${address} REPORTING USAGE`)}`)
 
         let success = false
         let attempt = 0
@@ -181,15 +183,15 @@ class Agent {
 
                 const message = "Usage report successfully recorded"
                 if (result.message !== message) {
-                    console.log(`❗ ${address} FAILED RECORDING USAGE`)
+                    console.log(`${timestamp} ${chalk.redBright(`❗ ${address} FAILED RECORDING USAGE`)}`)
                     await new Promise(resolve => setTimeout(resolve, 15000))
                     continue
                 }
 
                 success = true
-                console.log(`☑️ ${address} SUCCESSFULLY RECORDED USAGE`)
+                console.log(`${timestamp()} ${chalk.greenBright(`${address} SUCCESSFULLY RECORDED USAGE`)}`)
             } catch (error) {
-                console.error(error)
+                console.error(chalk.redBright(error))
             }
 
             attempt++
